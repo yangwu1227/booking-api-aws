@@ -1,0 +1,157 @@
+name: Terraform Resource Teardown
+
+on:
+  workflow_dispatch:
+
+env:
+  TERRAFORM_VERSION: 1.9.6
+
+permissions:
+  id-token: write # Required for requesting the Json Web Token (JWT)
+  contents: read  # Required for actions/checkout
+
+jobs:
+  terraform-destroy-prod:
+    name: Production Resource Teardown
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: infrastructure/booking_service/prod
+
+    steps:
+      - name: Checkout repository
+        id: checkout-repo
+        uses: actions/checkout@v4
+
+      - name: Configure AWS credentials from OIDC
+        id: configure-aws-credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          audience: sts.amazonaws.com
+          aws-region: ${{ secrets.AWS_REGION }}
+          role-to-assume: ${{ secrets.AWS_GITHUB_ACTIONS_ROLE_ARN }}
+          role-session-name: destroy-prod-session
+
+      - name: Add profile credentials to ~/.aws/credentials 
+        id: add-profile-credentials
+        run: |
+          aws configure set aws_access_key_id ${{ env.AWS_ACCESS_KEY_ID }} --profile admin
+          aws configure set aws_secret_access_key ${{ env.AWS_SECRET_ACCESS_KEY }} --profile admin
+          aws configure set aws_session_token ${{ env.AWS_SESSION_TOKEN }} --profile admin
+
+      - name: Set up Terraform
+        id: setup-terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: ${{ env.TERRAFORM_VERSION }}
+
+      - name: Terraform init
+        id: terraform-init
+        run: terraform init -no-color
+
+      - name: Terraform validate
+        id: terraform-validate
+        run: terraform validate -no-color
+
+      - name: Terraform destroy
+        id: terraform-destroy
+        run: terraform destroy -auto-approve -no-color
+
+  terraform-destroy-dev:
+    name: Development Resource Teardown
+    runs-on: ubuntu-latest
+    needs: terraform-destroy-prod
+    if: ${{ success() }}
+
+    defaults:
+      run:
+        working-directory: infrastructure/booking_service/dev
+
+    steps:
+      - name: Checkout repository
+        id: checkout-repo
+        uses: actions/checkout@v4
+
+      - name: Configure AWS credentials from OIDC
+        id: configure-aws-credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          audience: sts.amazonaws.com
+          aws-region: ${{ secrets.AWS_REGION }}
+          role-to-assume: ${{ secrets.AWS_GITHUB_ACTIONS_ROLE_ARN }}
+          role-session-name: destroy-dev-session
+
+      - name: Add profile credentials to ~/.aws/credentials 
+        id: add-profile-credentials
+        run: |
+          aws configure set aws_access_key_id ${{ env.AWS_ACCESS_KEY_ID }} --profile admin
+          aws configure set aws_secret_access_key ${{ env.AWS_SECRET_ACCESS_KEY }} --profile admin
+          aws configure set aws_session_token ${{ env.AWS_SESSION_TOKEN }} --profile admin
+
+      - name: Set up Terraform
+        id: setup-terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: ${{ env.TERRAFORM_VERSION }}
+
+      - name: Terraform init
+        id: terraform-init
+        run: terraform init -no-color
+
+      - name: Terraform validate
+        id: terraform-validate
+        run: terraform validate -no-color
+
+      - name: Terraform destroy
+        id: terraform-destroy
+        run: terraform destroy -auto-approve -no-color
+
+  terraform-destroy-vpc:
+    name: VPC Resource Teardown
+    runs-on: ubuntu-latest
+    needs: [terraform-destroy-prod, terraform-destroy-dev]
+    if: ${{ always() && needs.terraform-destroy-prod.result == 'success' && needs.terraform-destroy-dev.result == 'success' }}
+
+    defaults:
+      run:
+        working-directory: infrastructure/global/vpc
+
+    steps:
+      - name: Checkout repository
+        id: checkout-repo
+        uses: actions/checkout@v4
+
+      - name: Configure AWS credentials from OIDC
+        id: configure-aws-credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          audience: sts.amazonaws.com
+          aws-region: ${{ secrets.AWS_REGION }}
+          role-to-assume: ${{ secrets.AWS_GITHUB_ACTIONS_ROLE_ARN }}
+          role-session-name: destroy-vpc-session
+
+      - name: Add profile credentials to ~/.aws/credentials 
+        id: add-profile-credentials
+        run: |
+          aws configure set aws_access_key_id ${{ env.AWS_ACCESS_KEY_ID }} --profile admin
+          aws configure set aws_secret_access_key ${{ env.AWS_SECRET_ACCESS_KEY }} --profile admin
+          aws configure set aws_session_token ${{ env.AWS_SESSION_TOKEN }} --profile admin
+
+      - name: Set up Terraform
+        id: setup-terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: ${{ env.TERRAFORM_VERSION }}
+
+      - name: Terraform init
+        id: terraform-init
+        run: terraform init -no-color
+
+      - name: Terraform validate
+        id: terraform-validate
+        run: terraform validate -no-color
+
+      - name: Terraform destroy
+        id: terraform-destroy
+        run: terraform destroy -auto-approve -no-color

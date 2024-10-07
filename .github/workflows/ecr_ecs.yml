@@ -1,0 +1,75 @@
+name: Build and Push Docker Image to Amazon ECR & Deploy to Amazon ECS (Reusable)
+
+on:
+  workflow_call:
+    inputs:
+      environment:
+        required: true
+        type: string
+    secrets:
+      AWS_REGION:
+        required: true
+      AWS_GITHUB_ACTIONS_ROLE_ARN:
+        required: true
+
+permissions:
+  id-token: write # Required for requesting the Json Web Token (JWT)
+  contents: read # Required for actions/checkout
+
+jobs:
+  build-and-push-docker-image:
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: 'services/booking'
+
+    steps:
+    - name: Checkout repository
+      id: checkout-code
+      uses: actions/checkout@v4
+
+    - name: Configure AWS credentials from OIDC
+      id: configure-aws-credentials
+      uses: aws-actions/configure-aws-credentials@v4
+      with:
+        audience: sts.amazonaws.com
+        aws-region: ${{ secrets.AWS_REGION }}
+        role-to-assume: ${{ secrets.AWS_GITHUB_ACTIONS_ROLE_ARN }}
+        role-session-name: build-and-push-ecr-session
+
+    - name: Log in to Amazon ECR
+      id: login-ecr
+      uses: aws-actions/amazon-ecr-login@v2
+
+    - name: Build, tag, and push Docker image to Amazon ECR
+      id: build-tag-push
+      env:
+        IMAGE_URI: ${{ steps.login-ecr.outputs.registry }}/booking_service_${{ inputs.environment }}:${{ inputs.environment }}-${{ github.sha }}
+      run: |
+        docker build --tag $IMAGE_URI --file docker/deploy.Dockerfile .
+        docker push $IMAGE_URI
+
+    - name: Install pdm
+      id: install-pdm
+      uses: pdm-project/setup-pdm@v4
+      with:
+        python-version: 3.11
+
+    - name: Install dependencies
+      id: install-dependencies
+      run: pdm install --check --no-editable -G cloud
+
+    - name: Deploy task definition to Amazon ECS
+      id: deploy-ecs
+      env:
+        IMAGE_URI: ${{ steps.login-ecr.outputs.registry }}/booking_service_${{ inputs.environment }}:${{ inputs.environment }}-${{ github.sha }}
+        PYTHONUNBUFFERED: 1 # Disable output buffering for logging
+      run: |
+        pdm run python3 tools/deploy_ecs.py \
+                              --env ${{ inputs.environment }} \
+                              --image_uri $IMAGE_URI \
+                              --cluster_name booking_service_${{ inputs.environment }}_ecs_fargate_cluster \
+                              --service_name booking_service_${{ inputs.environment }}_ecs_fargate_service \
+                              --subnet_ids ${{ secrets.AWS_PRIVATE_SUBNET_1_ID }} ${{ secrets.AWS_PRIVATE_SUBNET_2_ID }} \
+                              --security_group_id ${{ secrets.AWS_ECS_SECURITY_GROUP_ID }} 

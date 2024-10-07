@@ -1,0 +1,9 @@
+# Ignore all files in the build context by default
+*
+# Include only necessary files
+!app/
+!tests/
+!migrations/
+!scripts/entrypoint.sh
+!pyproject.toml
+!pdm.lock

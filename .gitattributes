@@ -1,0 +1,3 @@
+# Ignore HCL files from language stats
+*.hcl linguist-vendored
+*.tf linguist-vendored

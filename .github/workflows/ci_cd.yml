@@ -1,0 +1,84 @@
+name: CI/CD Pipeline
+
+on: 
+  push:
+    branches:
+      - main
+    paths:
+      - 'services/booking/app/**'
+      - 'services/booking/tests/**'
+      - 'services/booking/pyproject.toml'
+      - 'services/booking/pdm.lock'
+      - '.github/workflows/ci_cd.yml'
+  pull_request:
+    branches:
+      - main
+    paths:
+      - 'services/booking/app/**'
+      - 'services/booking/tests/**'
+      - 'services/booking/pyproject.toml'
+      - 'services/booking/pdm.lock'
+      - '.github/workflows/ci_cd.yml'
+
+jobs:
+  run-tests-and-formatters:
+    runs-on: ubuntu-latest 
+
+    defaults:
+      run:
+        working-directory: services/booking
+
+    services:
+      postgres:
+        image: postgres:16
+        ports:
+          - 5432:5432
+        env:
+          POSTGRES_USER: db_user
+          POSTGRES_PASSWORD: db_password
+          POSTGRES_DB: db_test
+        options: >-
+          --health-cmd="pg_isready -U db_user"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=5
+
+    steps:
+      - name: Checkout repository
+        id: checkout-repo
+        uses: actions/checkout@v4   
+
+      - name: Install pdm
+        id: install-pdm
+        uses: pdm-project/setup-pdm@v4
+        with:
+          python-version: 3.11
+
+      - name: Install dependencies
+        id: install-dependencies
+        run: pdm install --check --no-editable -G test -G lint -G cloud
+          
+      - name: Run formatters
+        id: run-formatters
+        run: |
+          pdm run black . --check
+          pdm run isort . --check-only
+    
+      - name: Run tests & generate coverage report
+        id: run-tests-and-generate-coverage
+        env:
+          DATABASE_URL_TEST: postgresql+psycopg://db_user:db_password@localhost:5432/db_test
+        run: pdm run python3 -m pytest --cov=./ --cov-report=xml --junitxml=junit.xml tests/integration tests/unit
+
+      - name: Upload coverage to Codecov
+        id: upload-coverage-report
+        uses: codecov/codecov-action@v4
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+
+      - name: Upload test results to Codecov
+        id: upload-test-results
+        if: ${{ !cancelled() }}
+        uses: codecov/test-results-action@v1
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}

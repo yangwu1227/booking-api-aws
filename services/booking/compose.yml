@@ -1,0 +1,32 @@
+name: 'booking-service'
+
+services:
+
+  test:
+    build:
+      context: ./
+      dockerfile: docker/test.Dockerfile
+    container_name: test
+    command: uvicorn app.main:app --reload --workers 1 --host 0.0.0.0 --port 8000
+    volumes:
+      - ./app:/home/app_user/project/app
+      - ./tests:/home/app_user/project/tests
+      - ./pyproject.toml:/home/app_user/project/pyproject.toml
+      - ./migrations:/home/app_user/project/migrations
+    ports:
+      - 8004:8000
+    environment:
+      - ENV=test
+      - DOCS_URL=/docs
+      - DATABASE_URL_TEST=postgresql+psycopg://db_user:db_password@db-test:5432/db_test
+
+  db-test:
+    build:
+      context: ./
+      dockerfile: docker/db.Dockerfile
+    container_name: db-test
+    expose:
+      - 5432
+    environment:
+      - POSTGRES_USER=db_user
+      - POSTGRES_PASSWORD=db_password

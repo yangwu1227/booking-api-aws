@@ -1,0 +1,26 @@
+name: Deploy Prod Terraform
+
+on:
+  pull_request:
+    branches:
+      - main
+    paths:
+      - 'infrastructure/booking_service/prod/**'
+      - 'infrastructure/modules/booking_service/**'
+      - '.github/workflows/terraform_prod.yml'
+      - '.github/workflows/terraform_validate_plan_apply.yml'
+  push:
+    branches:
+      - main
+    paths:
+      - 'infrastructure/booking_service/prod/**'
+      - 'infrastructure/modules/booking_service/**'
+      - '.github/workflows/terraform_prod.yml'
+      - '.github/workflows/terraform_validate_plan_apply.yml'
+
+jobs:
+  terraform-prod:
+    uses: ./.github/workflows/terraform_validate_plan_apply.yml
+    with:
+      root_path: 'infrastructure/booking_service/prod'
+    secrets: inherit

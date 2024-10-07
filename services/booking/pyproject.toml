@@ -1,0 +1,89 @@
+[project]
+name = "booking-service"
+description = "A FastAPI-based booking service for speakers to manage, accept, reject, and list talk requests"
+dependencies = [
+    "fastapi>=0.115.0",
+    "uvicorn>=0.30.6",
+    "httpx>=0.27.2",
+    "gunicorn>=23.0.0",
+    "pydantic[email]>=2.9.2",
+    "pycountry>=24.6.1",
+    "SQLAlchemy>=2.0.35",
+    "alembic>=1.13.3",
+    "pydantic-settings>=2.5.2",
+    "psycopg[binary]>=3.2.3",
+    "passlib[bcrypt]>=1.7.4",
+    "pyjwt[crypto]>=2.9.0",
+    "python-multipart>=0.0.12",
+]
+requires-python = ">=3.11"
+readme = "README.md"
+
+[tool.pdm]
+distribution = false
+
+[tool.pdm.dev-dependencies]
+test = [
+    "pytest>=8.3.2",
+    "pytest-cov>=5.0.0",
+    "requests>=2.32.3",
+    "pytest-env>=1.1.5",
+]
+lint = [
+    "flake8>=7.1.1",
+    "black>=24.8.0",
+    "isort>=5.13.2",
+    "mypy>=1.11.2",
+]
+security = [
+    "safety>=3.2.7",
+    "bandit>=1.7.9",
+]
+notebook = [
+    "ipykernel>=6.29.5",
+]
+cloud = [
+    "boto3>=1.35.26",
+    "boto3-stubs[ecs,secretsmanager]>=1.35.26",
+]
+
+[tool.isort]
+profile = "black"
+py_version=311
+src_paths = ["app", "tests"]
+remove_redundant_aliases = true
+
+[tool.black]
+line-length = 100
+target-version = ['py311']
+
+[tool.mypy]
+python_version = 3.11
+warn_unused_ignores = true
+warn_no_return = true
+warn_unreachable = true
+disallow_untyped_calls = true
+exclude = [
+    "tests",
+]
+
+[[tool.mypy.overrides]]
+module = "passlib.context"
+ignore_missing_imports = true
+
+[tool.coverage.report]
+omit = [
+    "tests/end_to_end/*",
+    ".venv/*",
+    "migration/*",
+    "deploy_ecs.py",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+filterwarnings = [
+    "ignore::DeprecationWarning:passlib.utils" 
+]
+
+[tool.pytest_env]
+ENV = "test" 

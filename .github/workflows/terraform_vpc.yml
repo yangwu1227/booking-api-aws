@@ -1,0 +1,24 @@
+name: VPC Terraform
+
+on:
+  pull_request:
+    branches:
+      - main
+    paths:
+      - 'infrastructure/global/vpc/**'
+      - '.github/workflows/terraform_vpc.yml'
+      - '.github/workflows/terraform_validate_plan_apply.yml'
+  push:
+    branches:
+      - main
+    paths:
+      - 'infrastructure/global/vpc/**'
+      - '.github/workflows/terraform_vpc.yml'
+      - '.github/workflows/terraform_validate_plan_apply.yml'
+
+jobs:
+  vpc:
+    uses: ./.github/workflows/terraform_validate_plan_apply.yml
+    with:
+      root_path: 'infrastructure/global/vpc'
+    secrets: inherit

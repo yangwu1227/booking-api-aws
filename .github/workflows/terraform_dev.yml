@@ -1,0 +1,26 @@
+name: Deploy Dev Terraform
+
+on:
+  pull_request:
+    branches:
+      - main
+    paths:
+      - 'infrastructure/booking_service/dev/**'
+      - 'infrastructure/modules/booking_service/**'
+      - '.github/workflows/terraform_dev.yml'
+      - '.github/workflows/terraform_validate_plan_apply.yml'
+  push:
+    branches:
+      - main
+    paths:
+      - 'infrastructure/booking_service/dev/**'
+      - 'infrastructure/modules/booking_service/**'
+      - '.github/workflows/terraform_dev.yml'
+      - '.github/workflows/terraform_validate_plan_apply.yml'
+
+jobs:
+  terraform-dev:
+    uses: ./.github/workflows/terraform_validate_plan_apply.yml
+    with:
+      root_path: 'infrastructure/booking_service/dev'
+    secrets: inherit

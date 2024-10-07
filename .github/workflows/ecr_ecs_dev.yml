@@ -1,0 +1,35 @@
+name: Build and Push Docker Image to Amazon ECR & Deploy to Amazon ECS (Dev)
+
+on:
+  pull_request:
+    branches:
+      - main
+    paths:
+      - 'services/booking/app/**' # Include the app folder as a trigger
+      - 'services/booking/tools/manage_passwords.py' # Include the manage_passwords.py as a trigger
+      - 'services/booking/docker/deploy.Dockerfile' # Include the deploy.Dockerfile as a trigger
+      - 'services/booking/docker/deploy.Dockerfile.dockerignore' # Include the deploy.Dockerfile.dockerignore as a trigger
+      - 'services/booking/pyproject.toml' # Include the pyproject.toml as a trigger
+      - 'services/booking/pdm.lock' # Include the pdm.lock as a trigger
+      - '.github/workflows/ecr_ecs_dev.yml'
+      - '.github/workflows/ecr_ecs.yml'
+  push:
+    branches:
+      - main
+    paths:
+      - 'services/booking/app/**' # Include the app folder as a trigger
+      - 'services/booking/tools/manage_passwords.py' # Include the manage_passwords.py as a trigger
+      - 'services/booking/docker/deploy.Dockerfile' # Include the deploy.Dockerfile as a trigger
+      - 'services/booking/docker/deploy.Dockerfile.dockerignore' # Include the deploy.Dockerfile.dockerignore as a trigger
+      - 'services/booking/pyproject.toml' # Include the pyproject.toml as a trigger
+      - 'services/booking/pdm.lock' # Include the pdm.lock as a trigger
+      - '.github/workflows/ecr_ecs_dev.yml'
+      - '.github/workflows/ecr_ecs.yml'
+  workflow_dispatch:
+
+jobs:
+  ecr-ecs-dev:
+    uses: ./.github/workflows/ecr_ecs.yml
+    with:
+      environment: dev
+    secrets: inherit

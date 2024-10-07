@@ -1,0 +1,23 @@
+name: Build and Push Docker Image to Amazon ECR & Deploy to Amazon ECS (Prod)
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'services/booking/app/**' # Include the app folder as a trigger
+      - 'services/booking/tools/manage_passwords.py' # Include the manage_passwords.py as a trigger
+      - 'services/booking/docker/deploy.Dockerfile' # Include the deploy.Dockerfile as a trigger
+      - 'services/booking/docker/deploy.Dockerfile.dockerignore' # Include the deploy.Dockerfile.dockerignore as a trigger
+      - 'services/booking/pyproject.toml' # Include the pyproject.toml as a trigger
+      - 'services/booking/pdm.lock' # Include the pdm.lock as a trigger
+      - '.github/workflows/ecr_ecs_prod.yml'
+      - '.github/workflows/ecr_ecs.yml'
+  workflow_dispatch:
+
+jobs:
+  ecr-ecs-prod:
+    uses: ./.github/workflows/ecr_ecs.yml
+    with:
+      environment: prod
+    secrets: inherit
