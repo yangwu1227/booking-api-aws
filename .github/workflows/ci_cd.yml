@@ -67,7 +67,7 @@ jobs:
       - name: Run tests & generate coverage report
         id: run-tests-and-generate-coverage
         env:
-          DATABASE_URL_TEST: postgresql+psycopg://db_user:db_password@localhost:5432/db_test
+          DATABASE_URL_TEST: postgresql+psycopg://db_user:db_password@localhost:5432/db_test # Use pyscopg3 by adding +psycopg to the URL
         run: pdm run python3 -m pytest --cov=./ --cov-report=xml --junitxml=junit.xml tests/integration tests/unit
 
       - name: Upload coverage to Codecov

@@ -1,4 +1,4 @@
-name: Build and Push Docker Image to Amazon ECR & Deploy to Amazon ECS (Dev)
+name: Build and Push Docker Image to Amazon ECR & Register New Task Definition to Amazon ECS (Dev)
 
 on:
   pull_request:

@@ -3,7 +3,7 @@ name: End to End Tests
 on:
   workflow_run:
     workflows:
-        - Build and Push Docker Image to Amazon ECR & Deploy to Amazon ECS (Dev)
+        - Build and Push Docker Image to Amazon ECR & Register New Task Definition to Amazon ECS (Dev)
     types:
         - completed
   workflow_dispatch:
@@ -13,48 +13,48 @@ permissions:
   contents: read # Required for actions/checkout
 
 jobs:
-    end-to-end:
-      runs-on: ubuntu-latest 
-      # Only run the job if the previous job was successful or if the workflow was manually triggered
-      if: ${{ github.event.workflow_run.conclusion == 'success' || github.event_name == 'workflow_dispatch' }}
+  end-to-end:
+    runs-on: ubuntu-latest 
+    # Only run the job if the dev deployment job was successful or if the workflow was manually triggered
+    if: ${{ github.event.workflow_run.conclusion == 'success' || github.event_name == 'workflow_dispatch' }}
 
-      defaults:
-        run:
-          working-directory: services/booking
+    defaults:
+      run:
+        working-directory: services/booking
   
-      steps:
-        - name: Checkout repository
-          id: checkout-repo
-          uses: actions/checkout@v4   
+    steps:
+      - name: Checkout repository
+        id: checkout-repo
+        uses: actions/checkout@v4   
+  
+      - name: Install pdm
+        id: install-pdm
+        uses: pdm-project/setup-pdm@v4
+        with:
+            python-version: 3.11
+
+      - name: Configure AWS credentials from OIDC
+        id: configure-aws-credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          audience: sts.amazonaws.com
+          aws-region: ${{ secrets.AWS_REGION }}
+          role-to-assume: ${{ secrets.AWS_GITHUB_ACTIONS_ROLE_ARN }}
+          role-session-name: end-to-end-tests-session
+
+      - name: Get dev admin password from AWS secrets manager
+        id: get-dev-admin-password
+        run: |
+          secret_value=$(aws secretsmanager get-secret-value --secret-id admin_password_dev --profile admin | jq -r '.SecretString')
+          echo "::add-mask::$secret_value"
+          echo "ADMIN_PASSWORD=$secret_value" >> $GITHUB_ENV
     
-        - name: Install pdm
-          id: install-pdm
-          uses: pdm-project/setup-pdm@v4
-          with:
-              python-version: 3.11
-
-        - name: Configure AWS credentials from OIDC
-          id: configure-aws-credentials
-          uses: aws-actions/configure-aws-credentials@v4
-          with:
-            audience: sts.amazonaws.com
-            aws-region: ${{ secrets.AWS_REGION }}
-            role-to-assume: ${{ secrets.AWS_GITHUB_ACTIONS_ROLE_ARN }}
-            role-session-name: end-to-end-tests-session
-
-        - name: Obtain admin password from Secrets Manager
-          id: get-admin-password
-          run: |
-            secret_value=$(aws secretsmanager get-secret-value --secret-id admin_password_dev | jq -r '.SecretString')
-            echo "::add-mask::$secret_value"
-            echo "ADMIN_PASSWORD=$secret_value" >> $GITHUB_ENV
+      - name: Install dependencies
+        id: install-dependencies
+        run: pdm install --check --no-editable -G test -G cloud
       
-        - name: Install dependencies
-          id: install-dependencies
-          run: pdm install --check --no-editable -G test -G cloud
-        
-        - name: Run end-to-end tests
-          id: run-end-to-end-tests
-          env:
-            ADMIN_PASSWORD: ${{ env.ADMIN_PASSWORD }}
-          run: pdm run python3 -m pytest tests/end_to_end -v
+      - name: Run end-to-end tests
+        id: run-end-to-end-tests
+        env:
+          ADMIN_PASSWORD: ${{ env.ADMIN_PASSWORD }}
+        run: pdm run python3 -m pytest tests/end_to_end -v
