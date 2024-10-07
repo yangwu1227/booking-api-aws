@@ -1,0 +1,51 @@
+name: Deploy Documentation
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - services/booking/docs/**
+      - services/booking/mkdocs.yml
+      - .github/workflows/deploy_docs.yml
+
+permissions:
+  contents: write
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        id: checkout-code
+        uses: actions/checkout@v4
+
+      - name: Configure git credentials
+        run: |
+          git config user.name github-actions[bot]
+          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+          
+      - name: Setup python
+        uses: actions/setup-python@v5
+        with:
+          python-version: 3.11
+        
+      - name: Define and write cache_id
+        run: echo "cache_id=$(date --utc '+%V')" >> $GITHUB_ENV # Define a cache_id for the subsequent steps and write it to the env file
+
+      - name: Cache dependencies and build outputs 
+        uses: actions/cache@v4
+        with:
+          key: mkdocs-material-${{ env.cache_id }} # Refresh cache once a week via '%V'
+          path: .cache
+          restore-keys: |
+            mkdocs-material-
+
+      - name: Install dependencies
+        run: pip install mkdocs-material mkdocs
+        
+      - name: Build the documentation
+        run: |
+          cd project
+          mkdocs gh-deploy --force
