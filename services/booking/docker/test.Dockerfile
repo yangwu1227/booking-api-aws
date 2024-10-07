@@ -32,7 +32,7 @@ WORKDIR $PROJECT_ROOT_PATH
 COPY pyproject.toml pdm.lock ./
 # 1. --no-editable: all packages to be installed in non-editable mode
 # 2. --check: validate whether the lock is up to date
-RUN pip install pdm==$PDM_VERSION && pdm install --check --no-editable -G cloud -G test 
+RUN pip install pdm==$PDM_VERSION && pdm install --check --no-editable -G test 
 
 FROM python-base AS production
 

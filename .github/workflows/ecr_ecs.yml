@@ -58,7 +58,7 @@ jobs:
 
       - name: Install dependencies
         id: install-dependencies
-        run: pdm install --check --no-editable -G cloud
+        run: pdm install --check --no-editable 
 
       - name: Deploy task definition to Amazon ECS
         id: deploy-ecs

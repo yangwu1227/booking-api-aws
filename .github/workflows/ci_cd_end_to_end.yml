@@ -51,7 +51,7 @@ jobs:
     
       - name: Install dependencies
         id: install-dependencies
-        run: pdm install --check --no-editable -G test -G cloud
+        run: pdm install --check --no-editable -G test 
       
       - name: Run end-to-end tests
         id: run-end-to-end-tests
