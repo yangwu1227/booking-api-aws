@@ -12,10 +12,12 @@ resource "aws_route53_record" "service" {
 }
 
 resource "aws_acm_certificate" "service" {
-  domain_name       = var.domain_name
+  domain_name = var.domain_name
+  # See https://docs.aws.amazon.com/acm/latest/userguide/dns-validation.html for more information
   validation_method = "DNS"
 }
 
+# See https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/acm_certificate_validation#dns-validation-with-route-53 for more information
 resource "aws_route53_record" "certificate" {
   for_each = {
     for dvo in aws_acm_certificate.service.domain_validation_options : dvo.domain_name => {

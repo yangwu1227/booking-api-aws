@@ -6,7 +6,7 @@ resource "aws_ecs_task_definition" "booking_service" {
   memory                   = var.task_memory
   # ARN of the task execution role that the Amazon ECS container agent and the Docker daemon can assume
   execution_role_arn = aws_iam_role.ecs_execution_role.arn
-  # ARN of IAM role that allows ECS container task to make calls to other AWS services
+  # ARN of IAM role that provides permissions for the application code inside the container to make calls to AWS services
   task_role_arn = aws_iam_role.ecs_task_role.arn
   # Runtime platform
   runtime_platform {
@@ -30,7 +30,7 @@ resource "aws_ecs_task_definition" "booking_service" {
           "uvicorn.workers.UvicornWorker"
         ],
         essential = true,
-        # Environment variables to be passed to the container (i.e., maps to ENV)
+        # Environment variables to be passed to the container (i.e., maps to ENV in Dockerfiles)
         environment = [
           { name = "ENV", value = var.environment },
           { name = "AWS_DEFAULT_REGION", value = var.region },
@@ -76,7 +76,7 @@ resource "aws_ecs_service" "booking_service" {
   launch_type                = "FARGATE"
   # See https://docs.aws.amazon.com/AmazonECS/latest/developerguide/ecs_services.html#service_scheduler_replica
   scheduling_strategy = "REPLICA"
-  # Conditionally enable ECS Exec if the environment is "dev"
+  # Conditionally enable ECS Exec if the environment is "dev", useful for interactive debugging in development
   enable_execute_command = var.environment == "dev" ? true : false
 
   network_configuration {
@@ -87,7 +87,7 @@ resource "aws_ecs_service" "booking_service" {
 
   load_balancer {
     target_group_arn = aws_alb_target_group.default_target_group.arn
-    # Name of the container to associate with the application load balancer, must match the container name in the container definition
+    # Name of the container to associate with the application load balancer, must match the container name in the container definition above
     container_name = "${var.project_prefix}_ecs_fargate_container"
     container_port = var.container_port
   }

@@ -21,7 +21,8 @@ variable "environment" {
   description = "Deployment environment, either dev or prod"
 }
 
-# VPC variables
+# ---------------------------------------- VPC variables ---------------------------------------- #
+
 variable "vpc_id" {
   type        = string
   description = "ID of the VPC generated in the VPC module"
@@ -52,13 +53,15 @@ variable "load_balancer_security_group_id" {
   description = "Security group ID for the load balancer generated in the security group module"
 }
 
-# CloudWatch variable
+# -------------------------------------- CloudWatch variable ------------------------------------- #
+
 variable "log_retention_in_days" {
   type        = number
   description = "Number of days to retain logs in CloudWatch"
 }
 
-# ECS variables
+# ---------------------------------------- ECS variables ----------------------------------------- #
+
 variable "container_port" {
   type        = number
   description = "Port on which the container will listen"
@@ -92,7 +95,8 @@ variable "docs_url" {
   description = "URL for the API documentation, which is only used in dev environment"
 }
 
-# Route53 variables
+# -------------------------------------- Route53 variables --------------------------------------- #
+
 variable "public_hosted_zone_id" {
   type        = string
   description = "ID of the public hosted zone generated in the VPC module"
@@ -103,7 +107,8 @@ variable "domain_name" {
   type        = string
 }
 
-# ECR variables
+# ---------------------------------------- ECR variables ----------------------------------------- #
+
 variable "retained_image_count" {
   type        = number
   description = "Number of tagged images to retain in the ECR repository"
@@ -114,7 +119,8 @@ variable "untagged_image_expiry_days" {
   description = "Number of days after which untagged images will expire in the ECR repository"
 }
 
-# RDS variables
+# ---------------------------------------- RDS variables ----------------------------------------- #
+
 variable "engine" {
   type        = string
   description = "Database engine for the RDS database"
@@ -139,10 +145,11 @@ variable "allocated_storage" {
   description = "Storage capacity in GiB for the RDS instance"
 }
 
-# IAM ecs execution role policies
+# ------------------------------- IAM ECS execution role policies -------------------------------- #
+
 variable "ecs_execution_role_policy_arns" {
   type        = list(string)
-  description = "List of IAM policies to attach to the ECS execution role"
+  description = "List of IAM policies to attach to the ECS task execution role"
   default = [
     "arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy",
     "arn:aws:iam::aws:policy/CloudWatchLogsFullAccess"

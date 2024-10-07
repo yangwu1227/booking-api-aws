@@ -4,7 +4,7 @@ resource "aws_ecr_repository" "booking_service" {
   image_tag_mutability = "MUTABLE"
 
   image_scanning_configuration {
-    # Enable automatic scanning of images after they are pushed to the repository
+    # Enable automatic scanning of images for software vulnerabilities after they are pushed to the repository
     scan_on_push = true
   }
 }

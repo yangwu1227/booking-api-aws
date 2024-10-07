@@ -152,7 +152,7 @@ resource "aws_security_group" "vpc_endpoints" {
     from_port       = 443
     to_port         = 443
     protocol        = "tcp"
-    security_groups = [aws_security_group.ecs.id] # This is defined in the security groups module
+    security_groups = [aws_security_group.ecs.id] # This is defined in the security groups module, i.e., `security_groups.tf`
   }
 
   tags = {

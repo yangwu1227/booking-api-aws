@@ -62,6 +62,8 @@ resource "aws_secretsmanager_secret" "db_connection_string" {
 }
 
 resource "aws_secretsmanager_secret_version" "db_connection_string" {
-  secret_id     = aws_secretsmanager_secret.db_connection_string.id
+  secret_id = aws_secretsmanager_secret.db_connection_string.id
+  # Use pyscopg3 driver by specifying the (database backend + driver name) in the connection string, see https://docs.sqlalchemy.org/en/20/dialects/postgresql.html#module-sqlalchemy.dialects.postgresql.psycopg
+  # The password is retrieved from the random_password resource and URL encoded, see https://developer.hashicorp.com/terraform/language/functions/urlencode
   secret_string = "postgresql+psycopg://${aws_db_instance.booking_service.username}:${urlencode(random_password.db_password.result)}@${aws_db_instance.booking_service.endpoint}/${aws_db_instance.booking_service.db_name}"
 }
