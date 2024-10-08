@@ -1,0 +1,871 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+        <link rel="prev" href="../setup_workflows/">
+      
+      
+        <link rel="next" href="../migrations/">
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.5.39">
+    
+    
+      
+        <title>Application Overview - Booking Service API</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.8c3ca2c6.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    <body dir="ltr">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#app-package-app" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="Booking Service API" class="md-header__button md-logo" aria-label="Booking Service API" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Booking Service API
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Application Overview
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+  
+
+<nav class="md-nav md-nav--primary md-nav--integrated" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="Booking Service API" class="md-nav__button md-logo" aria-label="Booking Service API" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Booking Service API
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Home
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../terraform/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Terraform
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../setup_workflows/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Set Up Workflows
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  <span class="md-ellipsis">
+    Application Overview
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  <span class="md-ellipsis">
+    Application Overview
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#app-package-app" class="md-nav__link">
+    <span class="md-ellipsis">
+      App Package (app)
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#database-db" class="md-nav__link">
+    <span class="md-ellipsis">
+      Database (db)
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#docker-files-docker" class="md-nav__link">
+    <span class="md-ellipsis">
+      Docker Files (docker)
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#migrations-migrations" class="md-nav__link">
+    <span class="md-ellipsis">
+      Migrations (migrations)
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#automation-scripts-scripts" class="md-nav__link">
+    <span class="md-ellipsis">
+      Automation Scripts (scripts)
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#tools-tools" class="md-nav__link">
+    <span class="md-ellipsis">
+      Tools (tools)
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#authentication-authpy" class="md-nav__link">
+    <span class="md-ellipsis">
+      Authentication (auth.py)
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#database-management-dbpy" class="md-nav__link">
+    <span class="md-ellipsis">
+      Database Management (db.py)
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#configuration-management-configpy" class="md-nav__link">
+    <span class="md-ellipsis">
+      Configuration Management (config.py)
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#api-endpoints-api" class="md-nav__link">
+    <span class="md-ellipsis">
+      API Endpoints (api)
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#sqlalchemy-orm-pydantic-models" class="md-nav__link">
+    <span class="md-ellipsis">
+      SQLAlchemy ORM &amp; Pydantic Models
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="SQLAlchemy ORM & Pydantic Models">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#database-models-modelsdb_modelspy" class="md-nav__link">
+    <span class="md-ellipsis">
+      Database Models (models/db_models.py)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pydantic-models-modelspydantic_modelspy" class="md-nav__link">
+    <span class="md-ellipsis">
+      Pydantic Models (models/pydantic_models.py)
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../migrations/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Migrations
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../authentication/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Authentication
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  <h1>Application Overview</h1>
+
+<h2 id="app-package-app"><strong>App Package (<code>app</code>)</strong></h2>
+<p><center></p>
+<table>
+<thead>
+<tr>
+<th>Sub-Module</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>api</strong></td>
+<td>Contains API endpoint implementations such as submission, acceptance, rejection, deletion, and listing of booking requests.</td>
+</tr>
+<tr>
+<td><strong>models</strong></td>
+<td>Holds the application’s data models for the database (SQLAlchemy ORM) and Pydantic models used for validation and serialization.</td>
+</tr>
+<tr>
+<td><strong>auth.py</strong></td>
+<td>Implements authentication mechanisms via OAuth2, including password hashing, token creation/validation, and user role management.</td>
+</tr>
+<tr>
+<td><strong>config.py</strong></td>
+<td>Manages the application’s configuration settings, fetching database URLs from AWS Secrets Manager.</td>
+</tr>
+<tr>
+<td><strong>db.py</strong></td>
+<td>Provides database connection and session management using SQLAlchemy. This includes database session creation and dependency injections for FastAPI.</td>
+</tr>
+<tr>
+<td><strong>main.py</strong></td>
+<td>The entry point for the application, configuring the FastAPI instance and routing API endpoints.</td>
+</tr>
+</tbody>
+</table>
+<p></center></p>
+<hr />
+<h2 id="database-db"><strong>Database (<code>db</code>)</strong></h2>
+<p><center></p>
+<table>
+<thead>
+<tr>
+<th>File</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>create_db.sql</strong></td>
+<td>SQL script for initializing the database schema, used specifically for local development and testing. It sets up the database for a <code>test-db</code> service as defined in <code>db.Dockerfile</code>. The script is added to the Docker container via <code>ADD db/create_db.sql /docker-entrypoint-initdb.d</code> to automatically run upon container initialization.</td>
+</tr>
+</tbody>
+</table>
+<p></center></p>
+<hr />
+<h2 id="docker-files-docker"><strong>Docker Files (<code>docker</code>)</strong></h2>
+<p><center></p>
+<table>
+<thead>
+<tr>
+<th>File</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>db.Dockerfile</strong></td>
+<td>Dockerfile for setting up the test database on container start.</td>
+</tr>
+<tr>
+<td><strong>deploy.Dockerfile</strong></td>
+<td>Configures the deployment environment for running the application in ECS.</td>
+</tr>
+<tr>
+<td><strong>test.Dockerfile</strong></td>
+<td>Sets up the environment for running tests using <code>pytest</code> within a container.</td>
+</tr>
+</tbody>
+</table>
+<p></center></p>
+<hr />
+<h2 id="migrations-migrations"><strong>Migrations (<code>migrations</code>)</strong></h2>
+<p><center></p>
+<table>
+<thead>
+<tr>
+<th>File/Folder</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>alembic.ini</strong></td>
+<td>Configuration file for Alembic, handling database migrations.</td>
+</tr>
+<tr>
+<td><strong>versions</strong></td>
+<td>Contains versioned migration scripts for schema evolution, ensuring the database remains up-to-date.</td>
+</tr>
+</tbody>
+</table>
+<p></center></p>
+<hr />
+<h2 id="automation-scripts-scripts"><strong>Automation Scripts (<code>scripts</code>)</strong></h2>
+<p><center></p>
+<table>
+<thead>
+<tr>
+<th>Script</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>entrypoint.sh</strong></td>
+<td>Script executed when the local development and test container starts, initializes application services.</td>
+</tr>
+<tr>
+<td><strong>generate_and_store_keys.sh</strong></td>
+<td>Script for generating and storing keys using AWS Secrets Manager.</td>
+</tr>
+<tr>
+<td><strong>run_black_isort.sh</strong></td>
+<td>Executes linting and formatting commands (<code>black</code> and <code>isort</code>).</td>
+</tr>
+</tbody>
+</table>
+<p></center></p>
+<hr />
+<h2 id="tools-tools"><strong>Tools (<code>tools</code>)</strong></h2>
+<p><center></p>
+<table>
+<thead>
+<tr>
+<th>Tool</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>deploy_ecs.py</strong></td>
+<td>Automates the registration of new task definitions using boto3, executed by the <code>.github/workflows/ecr_ecs.yml</code> reusable workflow for both <code>dev</code> and <code>prod</code> environments. It also launches a standalone container to verify if data migrations need to be run; the <code>migrations</code> directory is accessible inside the container.</td>
+</tr>
+<tr>
+<td><strong>manage_passwords.py</strong></td>
+<td>Handles password rotation, securely storing secrets in AWS Secrets Manager and updating the database with new credentials.</td>
+</tr>
+<tr>
+<td><strong>manage_passwords_trigger.py</strong></td>
+<td>Orchestrates password rotation by launching a standalone Fargate task that inserts or updates user credentials in the <code>users</code> table.</td>
+</tr>
+</tbody>
+</table>
+<p></center></p>
+<hr />
+<h2 id="authentication-authpy"><strong>Authentication (<code>auth.py</code>)</strong></h2>
+<p><center></p>
+<table>
+<thead>
+<tr>
+<th>Functionality</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Token Creation</strong></td>
+<td>Creates JWT tokens for user sessions, including role-based and time-based restrictions.</td>
+</tr>
+<tr>
+<td><strong>Password Hashing</strong></td>
+<td>Uses <code>bcrypt</code> for securely hashing and verifying user passwords.</td>
+</tr>
+<tr>
+<td><strong>User Authentication</strong></td>
+<td>Verifies user credentials against stored values in the database and authenticates users with JWT tokens.</td>
+</tr>
+<tr>
+<td><strong>Role Management</strong></td>
+<td>Validates user roles (e.g., admin, requester) and enforces access control based on these roles.</td>
+</tr>
+</tbody>
+</table>
+<p></center></p>
+<hr />
+<h2 id="database-management-dbpy"><strong>Database Management (<code>db.py</code>)</strong></h2>
+<p><center></p>
+<table>
+<thead>
+<tr>
+<th>Functionality</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Session Management</strong></td>
+<td>Provides SQLAlchemy session creation, ensuring connections are managed efficiently across API requests.</td>
+</tr>
+<tr>
+<td><strong>Dependency Injection</strong></td>
+<td>Integrates sessions with FastAPI’s dependency system for use in endpoints.</td>
+</tr>
+</tbody>
+</table>
+<p></center></p>
+<hr />
+<h2 id="configuration-management-configpy"><strong>Configuration Management (<code>config.py</code>)</strong></h2>
+<p><center></p>
+<table>
+<thead>
+<tr>
+<th>Setting/Attribute</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>environment</strong></td>
+<td>Identifies the environment the application is running in (<code>dev</code>, <code>prod</code>, or <code>test</code>).</td>
+</tr>
+<tr>
+<td><strong>database_url</strong></td>
+<td>Fetches the database connection string from AWS Secrets Manager, ensuring secure access.</td>
+</tr>
+<tr>
+<td><strong>debug/testing flags</strong></td>
+<td>Controls whether the application runs in debug or testing mode.</td>
+</tr>
+</tbody>
+</table>
+<p></center></p>
+<hr />
+<h2 id="api-endpoints-api"><strong>API Endpoints (<code>api</code>)</strong></h2>
+<p><center></p>
+<table>
+<thead>
+<tr>
+<th>Endpoint</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>/submit_request</strong></td>
+<td>Allows submission of new booking requests.</td>
+</tr>
+<tr>
+<td><strong>/list_requests</strong></td>
+<td>Lists all booking requests. Restricted to admin users.</td>
+</tr>
+<tr>
+<td><strong>/accept_request</strong></td>
+<td>Accepts a specific booking request by ID. Restricted to admin users.</td>
+</tr>
+<tr>
+<td><strong>/reject_request</strong></td>
+<td>Rejects a specific booking request by ID. Restricted to admin users.</td>
+</tr>
+<tr>
+<td><strong>/delete_request/{id}</strong></td>
+<td>Deletes a booking request by ID. Restricted to admin users.</td>
+</tr>
+<tr>
+<td><strong>/ping/</strong></td>
+<td>Health check endpoint that verifies database migration status. Ensures the system is up-to-date before deployment.</td>
+</tr>
+</tbody>
+</table>
+<p></center></p>
+<hr />
+<h2 id="sqlalchemy-orm-pydantic-models"><strong>SQLAlchemy ORM &amp; Pydantic Models</strong></h2>
+<h3 id="database-models-modelsdb_modelspy"><strong>Database Models (<code>models/db_models.py</code>)</strong></h3>
+<p><center></p>
+<table>
+<thead>
+<tr>
+<th>Model</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>User</strong></td>
+<td>Represents users, storing their username, hashed password, role, and status (active/disabled).</td>
+</tr>
+<tr>
+<td><strong>Booking</strong></td>
+<td>Represents a booking request, storing event details, duration, status, and requestor email.</td>
+</tr>
+</tbody>
+</table>
+<p></center></p>
+<h3 id="pydantic-models-modelspydantic_modelspy"><strong>Pydantic Models (<code>models/pydantic_models.py</code>)</strong></h3>
+<p><center></p>
+<table>
+<thead>
+<tr>
+<th>Model</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Address</strong></td>
+<td>Represents event addresses, including validation for street, city, state, and country fields.</td>
+</tr>
+<tr>
+<td><strong>RequestStatus</strong></td>
+<td>Enum for status values: <code>pending</code>, <code>accepted</code>, <code>rejected</code>.</td>
+</tr>
+<tr>
+<td><strong>BookingResponse</strong></td>
+<td>Pydantic model representing booking details, including validation for event time, topic, and address.</td>
+</tr>
+<tr>
+<td><strong>SubmissionRequest</strong></td>
+<td>Model for incoming booking submissions, used for validation in API endpoints.</td>
+</tr>
+</tbody>
+</table>
+<p></center></p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+  <script>var tabs=__md_get("__tabs");if(Array.isArray(tabs))e:for(var set of document.querySelectorAll(".tabbed-set")){var labels=set.querySelector(".tabbed-labels");for(var tab of tabs)for(var label of labels.getElementsByTagName("label"))if(label.innerText.trim()===tab){var input=document.getElementById(label.htmlFor);input.checked=!0;continue e}}</script>
+
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    <script id="__config" type="application/json">{"base": "..", "features": ["toc.integrate", "navigation.top", "search.suggest", "search.highlight", "content.tabs.link"], "search": "../assets/javascripts/workers/search.6ce7567c.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.525ec568.min.js"></script>
+      
+    
+  </body>
+</html>

@@ -1,0 +1,760 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+        <link rel="prev" href="..">
+      
+      
+        <link rel="next" href="../setup_workflows/">
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.5.39">
+    
+    
+      
+        <title>Terraform - Booking Service API</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.8c3ca2c6.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    <body dir="ltr">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#terraform" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="Booking Service API" class="md-header__button md-logo" aria-label="Booking Service API" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Booking Service API
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Terraform
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+  
+
+<nav class="md-nav md-nav--primary md-nav--integrated" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="Booking Service API" class="md-nav__button md-logo" aria-label="Booking Service API" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Booking Service API
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Home
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  <span class="md-ellipsis">
+    Terraform
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  <span class="md-ellipsis">
+    Terraform
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#installation" class="md-nav__link">
+    <span class="md-ellipsis">
+      Installation
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#terraform-terminologies" class="md-nav__link">
+    <span class="md-ellipsis">
+      Terraform Terminologies
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#required-provider" class="md-nav__link">
+    <span class="md-ellipsis">
+      Required Provider
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#backend-configuration" class="md-nav__link">
+    <span class="md-ellipsis">
+      Backend Configuration
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Backend Configuration">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#purpose-of-terraform-state" class="md-nav__link">
+    <span class="md-ellipsis">
+      Purpose of Terraform State
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#infrastructure" class="md-nav__link">
+    <span class="md-ellipsis">
+      Infrastructure
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Infrastructure">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#global-infrastructure" class="md-nav__link">
+    <span class="md-ellipsis">
+      Global Infrastructure
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#application-infrastructure-modulesbooking-service" class="md-nav__link">
+    <span class="md-ellipsis">
+      Application Infrastructure (Modules/Booking Service)
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#github-action-workflows" class="md-nav__link">
+    <span class="md-ellipsis">
+      Github Action Workflows
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Github Action Workflows">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#deployment-order" class="md-nav__link">
+    <span class="md-ellipsis">
+      Deployment Order
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#repository-secrets" class="md-nav__link">
+    <span class="md-ellipsis">
+      Repository Secrets
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Repository Secrets">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#aws-infrastructure-configuration-outputs-from-vpc-module" class="md-nav__link">
+    <span class="md-ellipsis">
+      AWS Infrastructure Configuration (Outputs from VPC Module)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#github-actions-integration" class="md-nav__link">
+    <span class="md-ellipsis">
+      GitHub Actions Integration
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#testing-and-code-coverage" class="md-nav__link">
+    <span class="md-ellipsis">
+      Testing and Code Coverage
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../setup_workflows/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Set Up Workflows
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../application_overview/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Application Overview
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../migrations/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Migrations
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../authentication/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Authentication
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+<h1 id="terraform">Terraform</h1>
+<p>The infrastructure for the booking service api is managed using <a href="https://www.terraform.io/">Terraform</a>. The Terraform configuration files are located in the <code>infrastucture</code> directory.</p>
+<hr />
+<h2 id="installation">Installation</h2>
+<p>Install Terraform command line interface by following the instructions in the <a href="https://developer.hashicorp.com/terraform/tutorials/aws-get-started/install-cli">official documentation</a>:</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>$<span class="w"> </span>terraform<span class="w"> </span>--version
+</span></code></pre></div>
+<hr />
+<h2 id="terraform-terminologies">Terraform Terminologies</h2>
+<ul>
+<li>
+<p><strong>Configuration Files</strong>: Files with <code>.tf</code> extension, must use UTF-8 encoding.</p>
+</li>
+<li>
+<p><strong>Module</strong>: A collection of <code>.tf</code> files in a directory, can be local or remote.</p>
+</li>
+<li>
+<p><strong>Lock File</strong>: Terraform selects dependency versions based on configuration-defined version constraints. The dependency lock file (<code>.terraform.lock.hcl</code>) records selected provider versions for consistency across runs. Module versions are not tracked; the latest version meeting constraints is selected unless explicitly defined. Terraform automatically creates or updates this file each time the <code>terraform init</code> command is run against the current working directory. It should be included in version control to facilitate discussions on external dependencies via code review, similar to configuration changes.</p>
+</li>
+<li>
+<p><strong>Cache Directory</strong>: Terraform uses a cache directory (<code>.terraform</code>) to store various items. This directory should be included in <code>.gitignore</code> files to prevent unnecessary secrets from being committed to version control.</p>
+</li>
+</ul>
+<hr />
+<h2 id="required-provider">Required Provider</h2>
+<p>The required provider is <a href="https://registry.terraform.io/providers/hashicorp/aws/latest/docs">hashicorp/aws</a> with version <a href="https://developer.hashicorp.com/terraform/language/providers/requirements#version-constraints">~&gt; 5.0</a>.</p>
+<hr />
+<h2 id="backend-configuration">Backend Configuration</h2>
+<p>The Terraform state file is stored in an S3 bucket using the <a href="https://developer.hashicorp.com/terraform/language/backend/s3">s3</a> backend. </p>
+<div class="language-hcl highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="nb">terraform</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="w">  </span><span class="kr">backend</span><span class="w"> </span><span class="nv">&quot;s3&quot;</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="w">    </span><span class="na">bucket</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;s3-bucket-name&quot;</span>
+</span><span id="__span-1-4"><a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="w">    </span><span class="na">key</span><span class="w">     </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;path/to/terraform.tfstate&quot;</span>
+</span><span id="__span-1-5"><a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="w">  </span><span class="p">}</span>
+</span><span id="__span-1-6"><a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>
+</span><span id="__span-1-7"><a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="w">  </span><span class="nb">required_providers</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-1-8"><a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a><span class="w">    </span><span class="nb">aws</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-1-9"><a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a><span class="w">      </span><span class="na">source</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;hashicorp/aws&quot;</span>
+</span><span id="__span-1-10"><a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a><span class="w">      </span><span class="na">version</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;~&gt; 5.0&quot;</span>
+</span><span id="__span-1-11"><a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a><span class="w">    </span><span class="p">}</span>
+</span><span id="__span-1-12"><a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a><span class="w">  </span><span class="p">}</span>
+</span><span id="__span-1-13"><a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a><span class="p">}</span>
+</span></code></pre></div>
+<h3 id="purpose-of-terraform-state">Purpose of Terraform State</h3>
+<ul>
+<li><strong>Mapping Resources</strong>: State maps each resource in the configuration to its real-world equivalent (e.g., an AWS instance ID). This one-to-one mapping prevents ambiguity and errors.</li>
+<li><strong>Metadata Tracking</strong>: State retains dependencies and provider metadata, allowing Terraform to manage resource creation and destruction order, even when resources are deleted from the configuration.</li>
+<li><strong>Performance Optimization</strong>: State caches attribute values, reducing the need to query all resources during each <code>terraform plan</code> or <code>apply</code>, which is crucial for large infrastructures to minimize API rate limits and response times.</li>
+<li><strong>Syncing and Remote State</strong>: Local state files work for initial setups, but remote state is recommended for collaborative projects to ensure consistency and enable state locking, preventing simultaneous runs and maintaining up-to-date information.</li>
+</ul>
+<hr />
+<h2 id="infrastructure">Infrastructure</h2>
+<h3 id="global-infrastructure">Global Infrastructure</h3>
+<ol>
+<li>
+<p><strong>IAM Module</strong>:</p>
+<ul>
+<li>
+<p>Sets up a GitHub Actions role using <a href="https://docs.github.com/en/actions/security-for-github-actions/security-hardening-your-deployments/configuring-openid-connect-in-amazon-web-services">OpenID Connect (OIDC)</a> for automating subsequent deployments via workflows.</p>
+</li>
+<li>
+<p>This module is <strong>managed manually</strong> (i.e., <code>terraform init</code>, <code>terraform validate</code>, <code>terraform plan</code>, and <code>terraform apply</code> are executed locally instead of using GitHub-hosted runners) to assign the <a href="https://docs.aws.amazon.com/aws-managed-policy/latest/reference/AdministratorAccess.html">AdministratorAccess</a> managed policy to the role assumed by the github runner. The permissions can be refined further to follow the <strong>principle of least privilege</strong>, ensuring only necessary access is granted.</p>
+</li>
+</ul>
+</li>
+<li>
+<p><strong>VPC Module</strong>:</p>
+<ul>
+<li>
+<p><strong>Domain</strong>: Creates a <a href="https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/hosted-zones-working-with.html">(public) Route53 hosted zone</a> for domain management.</p>
+</li>
+<li>
+<p><strong>Network</strong>: Configures the VPC, including public/private subnets, route tables, internet gateway, and NAT gateway. VPC endpoints for services like S3 and ECR are also set up.</p>
+</li>
+<li>
+<p><strong>Security Groups</strong>: Defines security groups for different components like the <a href="https://docs.aws.amazon.com/elasticloadbalancing/latest/application/introduction.html">Application Load Balancer (ALB)</a> and ECS tasks.</p>
+</li>
+</ul>
+</li>
+</ol>
+<h3 id="application-infrastructure-modulesbooking-service">Application Infrastructure (Modules/Booking Service)</h3>
+<ol>
+<li>
+<p><strong>Secrets Management</strong>:</p>
+<ul>
+<li>Manages digital signature keys, passwords, and other sensitive information using AWS Secrets Manager.</li>
+</ul>
+</li>
+<li>
+<p><strong>ECR</strong>:</p>
+<ul>
+<li>Sets up an Elastic Container Registry (ECR) with lifecycle policies to manage image retention and expiration.</li>
+</ul>
+</li>
+<li>
+<p><strong>ECS Cluster and Services</strong>:</p>
+<ul>
+<li>Configures ECS clusters with Fargate and Fargate Spot capacity providers.</li>
+<li>Defines ECS task definitions and services, ensuring proper role assignments and container configurations.</li>
+</ul>
+</li>
+<li>
+<p><strong>Load Balancer</strong>:</p>
+<ul>
+<li>Deploys an ALB with HTTP and HTTPS listeners, target groups, and health check configurations.</li>
+</ul>
+</li>
+<li>
+<p><strong>RDS</strong>:</p>
+<ul>
+<li>Sets up an RDS instance (running postgres 16.3) for the application, including database subnet groups and security groups.</li>
+<li>Generates a connection string stored in AWS Secrets Manager for secure access.</li>
+</ul>
+</li>
+<li>
+<p><strong>Logging</strong>:</p>
+<ul>
+<li>Configures CloudWatch log groups and streams for ECS task logging.</li>
+</ul>
+</li>
+</ol>
+<hr />
+<h2 id="github-action-workflows">Github Action Workflows</h2>
+<ol>
+<li>
+<p><strong>Terraform Deployment Workflows</strong>:</p>
+<ul>
+<li>
+<p><strong>terraform_vpc.yml</strong>: Deploys the VPC module.</p>
+</li>
+<li>
+<p><strong>terraform_dev.yml</strong> and <strong>terraform_prod.yml</strong>: Deploy the development and production environments for the booking service using the predefined infrastructure modules. These workflows are mirror images of each other, with resources appropriately tagged or prefixed to differentiate between environments. This approach ensures that the development environment mirrors the production setup, enabling thorough testing and validation before deploying to production, minimizing risks and inconsistencies.</p>
+</li>
+</ul>
+</li>
+<li>
+<p><strong>Reusable Workflow</strong>:</p>
+<ul>
+<li>
+<p><strong>terraform_validate_plan_apply.yml</strong>: A reusable workflow that is invoked by all Terraform deployment workflows (e.g., VPC, dev, and prod) following the guidelines for <a href="https://docs.github.com/en/actions/sharing-automations/reusing-workflows#creating-a-reusable-workflow">reusing workflows</a>. It standardizes the deployment process with consistent steps, i.e., <code>terraform init</code>, <code>terraform validate</code>, <code>terraform plan</code>, and <code>terraform apply</code>, across all environments.</p>
+</li>
+<li>
+<p><strong>terraform_destroy.yml</strong>: A separate workflow used for teardown. It is manually triggered using <a href="https://docs.github.com/en/actions/writing-workflows/choosing-when-your-workflow-runs/events-that-trigger-workflows#workflow_dispatch">workflow_dispatch</a> and not part of the reusable pattern applied to the other workflows.</p>
+</li>
+</ul>
+</li>
+</ol>
+<h3 id="deployment-order">Deployment Order</h3>
+<ol>
+<li>
+<p><strong>GitHub Actions IAM Role</strong>: The IAM role using <a href="https://docs.github.com/en/actions/security-for-github-actions/security-hardening-your-deployments/configuring-openid-connect-in-amazon-web-services">OpenID Connect (OIDC)</a> must be created first, as it enables automated deployments via GitHub Actions workflows for subsequent infrastructure modules.</p>
+</li>
+<li>
+<p><strong>VPC Module</strong>: The VPC sets up the network components required for the application infrastructure. The outputs from this module are referenced by the booking service modules (e.g., subnet IDs and security groups).</p>
+</li>
+<li>
+<p><strong>Booking Service Modules</strong>: The application infrastructure components such as ECS, ECR, Secrets, and RDS are deployed last since they rely on the VPC’s outputs.</p>
+</li>
+</ol>
+<h3 id="repository-secrets">Repository Secrets</h3>
+<p>The following secrets must be configured in the GitHub repository:</p>
+<h4 id="aws-infrastructure-configuration-outputs-from-vpc-module">AWS Infrastructure Configuration (Outputs from VPC Module)</h4>
+<ul>
+<li>
+<p><strong>AWS_ECS_SECURITY_GROUP_ID</strong>: The ID of the security group assigned to the AWS ECS service, controlling inbound and outbound traffic for application containers and services such as database migrations.</p>
+</li>
+<li>
+<p><strong>AWS_PRIVATE_SUBNET_1_ID</strong> &amp; <strong>AWS_PRIVATE_SUBNET_2_ID</strong>: The IDs of the private subnets used for deploying ECS tasks. These subnets provide a secure, isolated  environment for running application containers and managing <em>standalone</em> jobs like database migrations and user credential updates.</p>
+</li>
+</ul>
+<h4 id="github-actions-integration">GitHub Actions Integration</h4>
+<ul>
+<li>
+<p><strong>AWS_GITHUB_ACTIONS_ROLE_ARN</strong>: The Amazon Resource Name (ARN) for the IAM role that allows GitHub Actions to securely interact with AWS services using OpenID Connect (OIDC).</p>
+</li>
+<li>
+<p><strong>AWS_REGION</strong>: The AWS region where resources (e.g., ECS, RDS, subnets) are hosted, ensuring deployments and container operations are executed in the correct regional context.</p>
+</li>
+</ul>
+<h4 id="testing-and-code-coverage">Testing and Code Coverage</h4>
+<ul>
+<li><strong>CODECOV_TOKEN</strong>: The token required for integrating Codecov into the CI/CD pipeline to report test coverage results securely. For more information, see the <a href="https://github.com/codecov/codecov-action">Codecov GitHub Action documentation</a>.</li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+  <script>var tabs=__md_get("__tabs");if(Array.isArray(tabs))e:for(var set of document.querySelectorAll(".tabbed-set")){var labels=set.querySelector(".tabbed-labels");for(var tab of tabs)for(var label of labels.getElementsByTagName("label"))if(label.innerText.trim()===tab){var input=document.getElementById(label.htmlFor);input.checked=!0;continue e}}</script>
+
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    <script id="__config" type="application/json">{"base": "..", "features": ["toc.integrate", "navigation.top", "search.suggest", "search.highlight", "content.tabs.link"], "search": "../assets/javascripts/workers/search.6ce7567c.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.525ec568.min.js"></script>
+      
+    
+  </body>
+</html>
