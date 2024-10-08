@@ -1,6 +1,4 @@
-# Set Up Workflows
-
-## Environment Setup
+## Environment
 
 ### Install PDM
 
@@ -16,9 +14,9 @@ Or, alternatively, other [installation methods](https://pdm-project.org/en/lates
 
 The dependencies are broken into groups:
 
-* Default dependencies: required for the core functionality of the project in production.
+* **Default dependencies**: required for the core functionality of the project in production.
 
-* Development dependencies: required for development, testing, and documentation.
+* **Development dependencies**: required for development, testing, and documentation.
 
 The specified python version in `pyproject.toml` is `>=3.11`, and so a **python 3.11** interpreter should be used. 
 
@@ -51,16 +49,37 @@ $ pdm install
 
 [Docker Compose](https://docs.docker.com/compose/) is used for local development to isolate the application and its dependencies in a containerized environment. Two services are defined the the `compose.yml` file:
 
-* `test`: The service for running the application, unit, integration, and end-to-end tests. The following directories are mapped or [bind-mounted](https://docs.docker.com/engine/storage/bind-mounts/) from the host to the container:
+1. `test`: The service for running the application, unit, integration, and end-to-end tests. The following directories are mapped or [bind-mounted](https://docs.docker.com/engine/storage/bind-mounts/) from the host to the container:
 
-  - `app/**`: The application code to run the FastAPI application.
-  - `tests/**`: The test code as all tests are run in the container.
-  - `pyproject.toml`: The project configuration file, which includes the dependencies, pytest configurations, and other project settings.
-  - `migrations`: The Alembic migrations directory to manage the database schema. This is mounted to the container to apply migrations each time a new container is created (i.e., `docker compose up --detach --build`).
+    - `app/**`: The application code to run the FastAPI application.
+    - `tests/**`: The test code as all tests are run in the container.
+    - `pyproject.toml`: The project configuration file, which includes the dependencies, pytest configurations, and other project settings.
+    - `migrations`: The Alembic migrations directory to manage the database schema. This is mounted to the container to apply migrations each time a new container is created (i.e., `docker compose up --detach --build`).
 
-* `db-test`: The service for running the PostgreSQL database for testing purposes. The database is initialized with the schema and data required for testing based on the migration files in the `migrations` directory.
+2. `db-test`: The service for running the PostgreSQL database for testing purposes. The database is initialized with the schema and data required for testing based on the migration files in the `migrations` directory.
 
-### Build & Run
+The entrypoing script of the `test.Dockerfile` waits for the PostgreSQL database to start before running the application. This is done by checking if the port `5432` is open using the `nc` command. The script is as follows:
+
+```shell
+#!/bin/sh
+
+echo "Waiting for postgres to start..."
+
+while ! nc -z db-test 5432; do
+  # The nc (Netcat) is utility to check network connectivity
+  # The -z flag ensures nc only scan for open ports without sending data
+  # If the connection fails (i.e., PostgreSQL isn't up yet), the loop continues
+  sleep 0.1
+done
+
+echo "PostgreSQL started"
+
+# 'exec' replaces the current shell process with the command and arguments passed to the script, preserving all arguments as separate arguments
+# For example: ./script.sh command --option value -> exec command --option value
+exec "$@"
+```
+
+### Build and Run the Containers
 
 To build the images and run the containers in the background:
 
@@ -97,7 +116,7 @@ $ docker compose exec <service-name> /bin/sh
 
 ### Testing with Pytest
 
-The test suite is run using [pytest](https://docs.pytest.org/en/stable/). The integration tests are run against a PostgreSQL database running in a Docker container. The `DATABASE_URL_TEST` database connection string is set as an environment variable in the `compose.yml` file.
+The test suite is run using [pytest](https://docs.pytest.org/en/stable/) and is divided into three categories:
 
 <center>
 
@@ -109,9 +128,15 @@ The test suite is run using [pytest](https://docs.pytest.org/en/stable/). The in
 
 </center>
 
+ The integration tests are run against a PostgreSQL database running in a Docker container. The `DATABASE_URL_TEST` database connection string is set as an environment variable in the `compose.yml` file.
+
 ```bash
-$ docker compose exec <service-name> python3 -m pytest -s tests/integration tests/unit tests/end_to_end -v
+$ docker compose exec <service-name> python3 -m pytest -s tests/integration tests/unit -v
 ```
+
+The end-to-end tests are run against the FastAPI application running in `dev` mode on aws. The `.github/workflows/ci_cd_end_to_end.yml` workflow is configured to run after the `.github/workflows/ecr_ecs_dev.yml` workflow completes **successfully**. It sets up the aws cli and fetches the authentication credentials from the aws secrets manager to run the end-to-end tests.
+
+---
 
 ## Automation 
 

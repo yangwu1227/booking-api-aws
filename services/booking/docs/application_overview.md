@@ -4,14 +4,16 @@
 
 | Sub-Module       | Description                                                                                   |
 |------------------|-----------------------------------------------------------------------------------------------|
-| **api**          | Contains API endpoint implementations such as submission, acceptance, rejection, and listing of requests.  |
-| **models**       | Holds the application’s data models, both for database (SQLAlchemy) and Pydantic models used for validation and serialization.  |
-| **auth.py**      | Implements authentication mechanisms, including password hashing, token creation/validation, and user role management. |
-| **config.py**    | Manages the application’s configuration settings, fetching values like database URLs and environment details from AWS Secrets Manager. |
-| **db.py**        | Provides database connection and session management using SQLAlchemy. This includes session creation and dependency injections for FastAPI. |
+| **api**          | Contains API endpoint implementations such as submission, acceptance, rejection, deletion, and listing of booking requests. |
+| **models**       | Holds the application’s data models for the database (SQLAlchemy ORM) and Pydantic models used for validation and serialization.  |
+| **auth.py**      | Implements authentication mechanisms via OAuth2, including password hashing, token creation/validation, and user role management. |
+| **config.py**    | Manages the application’s configuration settings, fetching database URLs from AWS Secrets Manager. |
+| **db.py**        | Provides database connection and session management using SQLAlchemy. This includes database session creation and dependency injections for FastAPI. |
 | **main.py**      | The entry point for the application, configuring the FastAPI instance and routing API endpoints. |
 
 </center>
+
+---
 
 ## **Database (`db`)**
 
@@ -19,21 +21,25 @@
 
 | File                 | Description                                        |
 |----------------------|----------------------------------------------------|
-| **create_db.sql**    | SQL script for initializing the database schema.   |
+| **create_db.sql**    | SQL script for initializing the database schema, used specifically for local development and testing. It sets up the database for a `test-db` service as defined in `db.Dockerfile`. The script is added to the Docker container via `ADD db/create_db.sql /docker-entrypoint-initdb.d` to automatically run upon container initialization. |
 
 </center>
 
-## **Docker Configuration (`docker`)**
+---
+
+## **Docker Files (`docker`)**
 
 <center>
 
 | File                 | Description                                        |
 |----------------------|----------------------------------------------------|
-| **db.Dockerfile**    | Dockerfile for setting up the database environment. |
+| **db.Dockerfile**    | Dockerfile for setting up the test database on container start. |
 | **deploy.Dockerfile**| Configures the deployment environment for running the application in ECS.                       |
 | **test.Dockerfile**  | Sets up the environment for running tests using `pytest` within a container.                    |
 
 </center>
+
+---
 
 ## **Migrations (`migrations`)**
 
@@ -46,17 +52,21 @@
 
 </center>
 
-## **Scripts (`scripts`)**
+---
+
+## **Automation Scripts (`scripts`)**
 
 <center>
 
 | Script                   | Description                                                                  |
 |--------------------------|------------------------------------------------------------------------------|
-| **entrypoint.sh**        | Script executed when the container starts, initializes application services. |
+| **entrypoint.sh**        | Script executed when the local development and test container starts, initializes application services. |
 | **generate_and_store_keys.sh** | Script for generating and storing keys using AWS Secrets Manager.         |
 | **run_black_isort.sh**   | Executes linting and formatting commands (`black` and `isort`).              |
 
 </center>
+
+---
 
 ## **Tools (`tools`)**
 
@@ -64,11 +74,13 @@
 
 | Tool                      | Description                                                                                  |
 |--------------------------|----------------------------------------------------------------------------------------------|
-| **deploy_ecs.py**        | Automates the deployment of ECS services using boto3 and ECS APIs.                           |
-| **manage_passwords.py**  | Manages password rotation, storing secrets in AWS Secrets Manager and updating the database. |
-| **manage_passwords_trigger.py** | Orchestrates password rotation by launching ECS tasks with specified configurations.   |
+| **deploy_ecs.py**        | Automates the registration of new task definitions using boto3, executed by the `.github/workflows/ecr_ecs.yml` reusable workflow for both `dev` and `prod` environments. It also launches a standalone container to verify if data migrations need to be run; the `migrations` directory is accessible inside the container. |
+| **manage_passwords.py**  | Handles password rotation, securely storing secrets in AWS Secrets Manager and updating the database with new credentials. |
+| **manage_passwords_trigger.py** | Orchestrates password rotation by launching a standalone Fargate task that inserts or updates user credentials in the `users` table. |
 
 </center>
+
+---
 
 ## **Authentication (`auth.py`)**
 
@@ -83,6 +95,8 @@
 
 </center>
 
+---
+
 ## **Database Management (`db.py`)**
 
 <center>
@@ -93,6 +107,8 @@
 | **Dependency Injection**   | Integrates sessions with FastAPI’s dependency system for use in endpoints.                                 |
 
 </center>
+
+---
 
 ## **Configuration Management (`config.py`)**
 
@@ -105,6 +121,8 @@
 | **debug/testing flags**    | Controls whether the application runs in debug or testing mode.                                            |
 
 </center>
+
+---
 
 ## **API Endpoints (`api`)**
 
@@ -121,7 +139,9 @@
 
 </center>
 
-## **Models**
+---
+
+## **SQLAlchemy ORM & Pydantic Models**
 
 ### **Database Models (`models/db_models.py`)**
 
@@ -130,7 +150,7 @@
 | Model             | Description                                                                                   |
 |-------------------|-----------------------------------------------------------------------------------------------|
 | **User**          | Represents users, storing their username, hashed password, role, and status (active/disabled).|
-| **Booking**       | Represents a booking request, storing event details, duration, status, and requestor information.  |
+| **Booking**       | Represents a booking request, storing event details, duration, status, and requestor email.  |
 
 </center>
 
@@ -144,17 +164,5 @@
 | **RequestStatus**   | Enum for status values: `pending`, `accepted`, `rejected`.                                    |
 | **BookingResponse** | Pydantic model representing booking details, including validation for event time, topic, and address.|
 | **SubmissionRequest** | Model for incoming booking submissions, used for validation in API endpoints.              |
-
-</center>
-
-## **Tools and Management Scripts (`tools`)**
-
-<center>
-
-| Tool                      | Description                                                                                  |
-|--------------------------|----------------------------------------------------------------------------------------------|
-| **deploy_ecs.py**        | Automates registering new task definitions and migrations with ECS services.                 |
-| **manage_passwords.py**  | Rotates user passwords, updates AWS Secrets Manager, and syncs with the database securely.   |
-| **manage_passwords_trigger.py** | Launches standalone ECS tasks for password rotation with specific parameters based on environment.|
 
 </center>

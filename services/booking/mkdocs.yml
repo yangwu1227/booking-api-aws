@@ -28,5 +28,6 @@ nav:
   - Home: index.md
   - Terraform: terraform.md
   - Set Up Workflows: setup_workflows.md
-  - Application: application.md
+  - Application Overview: application_overview.md
   - Migrations: migrations.md
+  - Authentication: authentication.md
