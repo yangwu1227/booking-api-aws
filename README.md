@@ -2,7 +2,7 @@
 
 An asynchronous RESTful API built with Python, FastAPI, and Docker for learning purposes. It allows users to create, retrieve, update, and delete booking requests. The app integrates with a PostgreSQL database hosted on AWS RDS and is containerized using Docker for both local development and deployment on AWS ECS Fargate.
 
-[**Project Documentation**](https://yangwu1227.github.io/booking-service-api-aws/)
+[**Project Documentation**](https://yangwu1227.github.io/booking-service-api/)
 
 ## Infrastructure
 
