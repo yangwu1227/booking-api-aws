@@ -56,7 +56,7 @@ jobs:
 
       - name: Install dependencies
         id: install-dependencies
-        run: pdm install --check --no-editable -G test -G lint 
+        run: pdm install --check --no-editable -G test -G lint-fmt 
           
       - name: Run formatters
         id: run-formatters

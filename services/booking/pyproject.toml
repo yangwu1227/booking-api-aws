@@ -24,14 +24,14 @@ readme = "README.md"
 [tool.pdm]
 distribution = false
 
-[tool.pdm.dev-dependencies]
+[dependency-groups]
 test = [
     "pytest>=8.3.2",
     "pytest-cov>=5.0.0",
     "requests>=2.32.3",
     "pytest-env>=1.1.5",
 ]
-lint = [
+lint-fmt = [
     "flake8>=7.1.1",
     "black>=24.8.0",
     "isort>=5.13.2",
