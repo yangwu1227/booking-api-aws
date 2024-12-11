@@ -1,4 +1,3 @@
-# Variables with default values
 variable "region" {
   type        = string
   description = "AWS region where resources will be deployed"
@@ -7,7 +6,7 @@ variable "region" {
 
 variable "profile" {
   type        = string
-  description = "AWS configuration profile with AdministratorAccess permissions"
+  description = "AWS configuration profile with necessary permissions"
   default     = "admin"
 }
 
@@ -17,7 +16,6 @@ variable "project_prefix" {
   default     = "booking_service"
 }
 
-# No default values for these variables
 variable "github_oidc_provider_arn" {
   type        = string
   description = "Amazon Resource Name (ARN) of the GitHub OIDC provider for authentication"

@@ -1,14 +1,11 @@
-# Variables with default values
 variable "region" {
   type        = string
   description = "AWS region to deploy the resources"
-  default     = "us-east-1"
 }
 
 variable "profile" {
   type        = string
-  description = "AWS configuration profile with AdministratorAccess permissions"
-  default     = "admin"
+  description = "AWS configuration profile with necessary permissions"
 }
 
 variable "project_prefix" {

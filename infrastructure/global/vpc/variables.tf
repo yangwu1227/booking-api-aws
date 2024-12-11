@@ -1,4 +1,3 @@
-# Variables with default values
 variable "region" {
   type        = string
   description = "AWS region to deploy resources"
@@ -7,7 +6,7 @@ variable "region" {
 
 variable "profile" {
   type        = string
-  description = "AWS configuration profile with AdministratorAccess permissions"
+  description = "AWS configuration profile with necessary permissions"
   default     = "admin"
 }
 

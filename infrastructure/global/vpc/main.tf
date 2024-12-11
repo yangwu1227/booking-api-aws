@@ -1,6 +1,6 @@
 terraform {
   backend "s3" {
-    bucket  = "yang-templates"
+    bucket  = "tf-cf-templates"
     key     = "booking-service-terraforms/vpc/main.tfstate"
     profile = "admin"
   }

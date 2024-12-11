@@ -1,6 +1,6 @@
 terraform {
   backend "s3" {
-    bucket  = "yang-templates"
+    bucket  = "tf-cf-templates"
     key     = "booking-service-terraforms/development/terraform.tfstate"
     profile = "admin"
   }
@@ -21,13 +21,15 @@ provider "aws" {
 data "terraform_remote_state" "vpc" {
   backend = "s3"
   config = {
-    bucket = "yang-templates"
+    bucket = "tf-cf-templates"
     key    = "booking-service-terraforms/vpc/main.tfstate"
     region = var.region
   }
 }
 
 module "booking_service" {
+  profile                         = var.profile
+  region                          = var.region
   source                          = "../../modules/booking_service"
   vpc_id                          = data.terraform_remote_state.vpc.outputs.vpc_id
   ecs_security_group_id           = data.terraform_remote_state.vpc.outputs.ecs_security_group_id
@@ -36,7 +38,6 @@ module "booking_service" {
   public_subnet_2_id              = data.terraform_remote_state.vpc.outputs.public_subnet_2_id
   private_subnet_1_id             = data.terraform_remote_state.vpc.outputs.private_subnet_1_id
   private_subnet_2_id             = data.terraform_remote_state.vpc.outputs.private_subnet_2_id
-  region                          = var.region
   retained_image_count            = 3
   untagged_image_expiry_days      = 7
   log_retention_in_days           = 30
